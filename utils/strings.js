@@ -11,4 +11,7 @@ export default {
   makePayment: "Make Payment",
   amount: "Amount",
   remarks: "Remarks",
+  createRental: "New Rental",
+  rentalNumber: "Rental Number",
+  status: "Status",
 };

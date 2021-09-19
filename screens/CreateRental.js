@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { FAB, IconButton, TextInput } from "react-native-paper";
+import RNPickerSelect from "react-native-picker-select";
 import Header from "../components/Header";
 import utils from "../utils";
 
-function MakePayment({ navigation }) {
-  const [amount, setAmount] = useState(0);
-  const [remarks, setRemarks] = useState(null);
+function CreateRental({ navigation }) {
+  const [rentalNumber, setRentalNumber] = useState(null);
+  const [rentalAmount, setRentalAmount] = useState(0);
+  const [status, setStatus] = useState(null);
 
   const submit = () => {
     navigation.goBack();
@@ -14,7 +16,7 @@ function MakePayment({ navigation }) {
 
   return (
     <>
-      <Header titleText={utils.strings.makePayment} />
+      <Header titleText={utils.strings.createRental} />
       <IconButton
         icon="close"
         size={25}
@@ -24,26 +26,51 @@ function MakePayment({ navigation }) {
       />
       <View style={styles.container}>
         <TextInput
-          label={utils.strings.amount}
-          value={amount}
+          label={utils.strings.rentalNumber}
+          value={rentalNumber}
           mode="outlined"
-          keyboardType="number-pad"
+          keyboardType="default"
           placeholderTextColor={utils.styles.placeholderTextColor}
-          onChangeText={setAmount}
+          onChangeText={setRentalNumber}
           style={styles.input}
           theme={{ colors: { primary: utils.styles.primaryColor } }}
         />
         <TextInput
-          label={utils.strings.remarks}
-          value={remarks}
-          onChangeText={setRemarks}
+          label={utils.strings.amount}
+          value={rentalAmount}
+          mode="outlined"
+          keyboardType="number-pad"
+          placeholderTextColor={utils.styles.placeholderTextColor}
+          onChangeText={setRentalAmount}
+          style={styles.input}
+          theme={{ colors: { primary: utils.styles.primaryColor } }}
+        />
+        <RNPickerSelect
+          onValueChange={(value) => setStatus(value)}
+          value={status}
+          items={[
+            { label: "Available", value: "Available" },
+            { label: "Occupied", value: "Occupied" },
+          ]}
+          mode="outlined"
+          keyboardType="default"
+          placeholderTextColor={utils.styles.placeholderTextColor}
+          style={styles.input}
+          theme={{ colors: { primary: utils.styles.primaryColor } }}
+        />
+        {/* <Picker
+          selectedValue={status}
+          onValueChange={(itemValue, itemIndex) => setStatus(itemValue)}
           mode="outlined"
           style={styles.text}
           scrollEnabled={true}
           returnKeyType="done"
           blurOnSubmit={true}
           theme={{ colors: { primary: utils.styles.primaryColor } }}
-        />
+        >
+          <Picker.Item label="Available" value="Available" />
+          <Picker.Item label="Occupied" value="Occupied" />
+        </Picker> */}
         <FAB style={styles.fab} icon="check" onPress={() => submit()} />
       </View>
     </>
@@ -82,4 +109,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MakePayment;
+export default CreateRental;

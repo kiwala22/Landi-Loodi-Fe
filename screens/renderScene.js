@@ -1,4 +1,5 @@
 import * as React from "react";
+import Contracts from "./Contracts";
 import Payments from "./Payments";
 import Rentals from "./Rentals";
 import Tenants from "./Tenants";
@@ -12,7 +13,7 @@ const renderScene = (props, { route }) => {
     case "payments":
       return <Payments {...props} />;
     case "contracts":
-      return <Rentals {...props} />;
+      return <Contracts {...props} />;
     default:
       return null;
   }

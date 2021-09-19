@@ -15,8 +15,8 @@ export default function Dashboard(props) {
 
   const [routes] = React.useState([
     { key: "payments", title: "Payments", icon: "credit-card" },
-    { key: "contracts", title: "Contracts", icon: "id-card-alt" },
-    { key: "tenants", title: "Tenants", icon: "address-book" },
+    { key: "contracts", title: "Contracts", icon: "file" },
+    { key: "tenants", title: "Tenants", icon: "users" },
     { key: "rentals", title: "Rentals", icon: "home" },
   ]);
 
@@ -55,7 +55,7 @@ export default function Dashboard(props) {
               );
             }}
             renderLabel={({ route, focused, color }) => (
-              <Text style={{ color, margin: 0, fontSize: 15 }}>
+              <Text style={{ color, margin: 0, fontSize: 14 }}>
                 {route.title}
               </Text>
             )}
@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(46, 113, 102, 0.8)",
     position: "absolute",
     right: 0,
-    top: 40,
+    top: 20,
     margin: 10,
   },
 });

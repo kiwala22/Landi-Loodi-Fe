@@ -30,7 +30,7 @@ export default function Payments({ navigation }) {
       <FAB
         style={styles.fab}
         small
-        icon="card"
+        icon="credit-card"
         label="Pay"
         onPress={() => navigation.navigate("ViewMakePayment")}
       />

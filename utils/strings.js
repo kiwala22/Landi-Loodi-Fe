@@ -8,4 +8,7 @@ export default {
   copyright: "company name",
   password: "Password",
   phone: "Phone",
+  makePayment: "Make Payment",
+  amount: "Amount",
+  remarks: "Remarks",
 };

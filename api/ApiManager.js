@@ -28,8 +28,8 @@ export default class ApiManager {
     this.http.setAuthToken(authToken);
   }
 
-  static isLoggedIn() {
-    return !!this.authToken;
+  isLoggedIn() {
+    return this.authToken;
   }
 
   login(phone_number, password) {
@@ -47,6 +47,10 @@ export default class ApiManager {
       .catch(function (error) {
         return Promise.reject(error);
       });
+  }
+
+  logout() {
+    return Promise.resolve().then(Utils.storage.clearAuthKeys());
   }
 
   update(path, data) {

@@ -10,19 +10,24 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import ApiManager from "../api/ApiManager";
+import { useDispatch, useSelector } from "react-redux";
+// import { AddTenants } from "../redux/creators";
 import Utils from "../utils";
 
-export default function LoginScreen() {
+export default function LoginScreen({ navigation }) {
+  const ApiManager = useSelector((state) => state.ApiManager);
+  const dispatch = useDispatch();
+  // dispatch(AddTenants([]));
+
   const [phone, setPhone] = useState(null);
   const [password, setPassword] = useState(null);
-  let api = new ApiManager();
 
   const Login = () => {
-    api
-      .login(phone, password)
-      .then(() => alert(api.authToken))
-      .catch((e) => alert("error"));
+    ApiManager.login(phone, password)
+      .then(() => {
+        navigation.navigate("ViewDashboard");
+      })
+      .catch((e) => alert("Authentication Failed!"));
   };
 
   return (

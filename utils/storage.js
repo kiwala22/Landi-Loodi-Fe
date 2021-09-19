@@ -24,7 +24,7 @@ class StorageHelper {
   }
 
   clearAuthKeys() {
-    storeData(AUTH_KEY, "");
+    return storeData(AUTH_KEY, "");
   }
 
   setAuthKeyInStorage(authKey) {

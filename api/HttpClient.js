@@ -1,6 +1,5 @@
 import axios from "axios";
-
-let TOKEN_HEADER = "Authorization";
+const TOKEN_HEADER = "Authorization";
 
 export default class HttpClient {
   constructor(baseUrl) {

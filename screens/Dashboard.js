@@ -28,9 +28,9 @@ export default function Dashboard(props) {
     <>
       <Header titleText={Utils.strings.appName} />
       <IconButton
-        icon="close"
+        icon="logout"
         size={25}
-        color="red"
+        color="white"
         onPress={Logout}
         style={styles.iconButton}
       />
@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
     backgroundColor: Utils.styles.primaryColor,
   },
   iconButton: {
-    backgroundColor: "rgba(46, 113, 102, 0.8)",
+    backgroundColor: "transparent",
     position: "absolute",
     right: 0,
     top: 20,

@@ -3,5 +3,5 @@
  */
 export default {
   primaryColor: "#b0006d",
-  placeholderTextColor: "#929292",
+  placeholderTextColor: "#9EA0A4",
 };

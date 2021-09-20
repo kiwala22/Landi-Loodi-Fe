@@ -1,26 +1,44 @@
-import React from "react";
-import { FlatList, StyleSheet, Text, View } from "react-native";
+import React, { useEffect } from "react";
+import { FlatList, StyleSheet } from "react-native";
 import { FAB, List } from "react-native-paper";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { ADD_RENTALS } from "../redux/types";
 import utils from "../utils";
 
 export default function Rentals({ navigation }) {
   const rentals = useSelector((state) => state.rentals);
+  const ApiManager = useSelector((state) => state.ApiManager);
+  const dispatcher = useDispatch();
+
+  useEffect(() => getRentalsData(), []);
+
+  const getRentalsData = () => {
+    let path = "/rentals";
+    let variables = {};
+    ApiManager.get(path, variables)
+      .then((response) => {
+        dispatcher({ type: ADD_RENTALS, payload: response.data });
+      })
+      .catch((e) => alert("Failed to Load Data."));
+  };
 
   return (
-    <View style={styles.container}>
+    // <View style={styles.container}>
+    <>
       {rentals.length === 0 ? (
-        <View style={styles.titleContainer}>
-          <Text style={styles.title}>No Rentals registered yet!</Text>
-        </View>
+        <>
+          <View style={styles.titleContainer}>
+            <Text style={styles.title}>No Rentals registered yet!</Text>
+          </View>
+        </>
       ) : (
         <FlatList
           data={rentals}
           renderItem={({ item }) => (
             <List.Item
-              title={"test"}
-              description={"remarks"}
-              descriptionNumberOfLines={1}
+              title={item.rental_number}
+              description={item.status}
+              left={(props) => <List.Icon {...props} icon="home" />}
               titleStyle={styles.listTitle}
             />
           )}
@@ -34,7 +52,8 @@ export default function Rentals({ navigation }) {
         label="New Rental"
         onPress={() => navigation.navigate("ViewCreateRental")}
       />
-    </View>
+    </>
+    // </View>
   );
 }
 

@@ -4,17 +4,15 @@ const AUTH_KEY = "AUTH_KEY";
 const storeData = async (key, value) => {
   try {
     await AsyncStorage.setItem(key, value);
-  } catch (e) {
-    // saving error
-  }
+  } catch (e) {}
 };
 
 const getData = async (key) => {
   try {
     const value = await AsyncStorage.getItem(key);
-    return value;
+    return JSON.parse(value);
   } catch (e) {
-    // error reading value
+    alert(e);
   }
 };
 

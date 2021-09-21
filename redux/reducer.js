@@ -25,19 +25,19 @@ const initialState = {
 function reducer(state = initialState, action) {
   switch (action.type) {
     case ADD_TENANTS:
-      tenants = processData(state.tenants, action.payload);
+      let tenants = processData(state.tenants, action.payload);
       return xtend(state, { tenants });
 
     case ADD_PAYMENTS:
-      payments = processData(state.payments, action.payload);
+      let payments = processData(state.payments, action.payload);
       return xtend(state, { payments });
 
     case ADD_RENTALS:
-      rentals = processData(state.rentals, action.payload);
+      let rentals = processData(state.rentals, action.payload);
       return xtend(state, { rentals });
 
     case ADD_CONTRACTS:
-      contracts = processData(state.contracts, action.payload);
+      let contracts = processData(state.contracts, action.payload);
       return xtend(state, { contracts });
 
     default:

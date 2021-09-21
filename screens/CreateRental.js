@@ -9,7 +9,7 @@ import utils from "../utils";
 
 function CreateRental({ navigation }) {
   const [rentalNumber, setRentalNumber] = useState(null);
-  const [rentalAmount, setRentalAmount] = useState(0);
+  const [rentalAmount, setRentalAmount] = useState(null);
   const [status, setStatus] = useState(null);
   const ApiManager = useSelector((state) => state.ApiManager);
   const dispatcher = useDispatch();
@@ -49,21 +49,21 @@ function CreateRental({ navigation }) {
       />
       <View style={styles.container}>
         <TextInput
-          label={utils.strings.rentalNumber}
+          placeholder={utils.strings.rentalNumber}
           value={rentalNumber}
           mode="outlined"
           keyboardType="default"
-          placeholderTextColor={utils.styles.placeholderTextColor}
+          placeholderTextColor={placeholder.color}
           onChangeText={setRentalNumber}
           style={styles.input}
           theme={{ colors: { primary: utils.styles.primaryColor } }}
         />
         <TextInput
-          label={utils.strings.amount}
+          placeholder={utils.strings.amount}
           value={rentalAmount}
           mode="outlined"
           keyboardType="number-pad"
-          placeholderTextColor={utils.styles.placeholderTextColor}
+          placeholderTextColor={placeholder.color}
           onChangeText={setRentalAmount}
           style={styles.input}
           theme={{ colors: { primary: utils.styles.primaryColor } }}
@@ -75,7 +75,7 @@ function CreateRental({ navigation }) {
             { label: "Available", value: "Available" },
             { label: "Occupied", value: "Occupied" },
           ]}
-          placeholderTextColor={utils.styles.placeholderTextColor}
+          placeholderTextColor={placeholder.color}
           theme={{ colors: { primary: utils.styles.primaryColor } }}
           onValueChange={(value) => setStatus(value)}
           style={pickerSelectStyles}
@@ -104,6 +104,7 @@ const styles = StyleSheet.create({
   input: {
     fontSize: 15,
     marginBottom: 20,
+    backgroundColor: "#fff",
   },
   text: {
     height: 80,
@@ -135,6 +136,7 @@ const pickerSelectStyles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 8,
     borderWidth: 0.5,
+    height: 60,
     borderColor: "purple",
     borderRadius: 8,
     color: "black",

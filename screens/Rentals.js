@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { FlatList, StyleSheet } from "react-native";
+import { FlatList, StyleSheet, Text, View } from "react-native";
 import { FAB, List } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
 import { ADD_RENTALS } from "../redux/types";
@@ -23,7 +23,6 @@ export default function Rentals({ navigation }) {
   };
 
   return (
-    // <View style={styles.container}>
     <>
       {rentals.length === 0 ? (
         <>
@@ -53,7 +52,6 @@ export default function Rentals({ navigation }) {
         onPress={() => navigation.navigate("ViewCreateRental")}
       />
     </>
-    // </View>
   );
 }
 

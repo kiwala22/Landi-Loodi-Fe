@@ -41,10 +41,10 @@ export default class ApiManager {
 
     return Promise.resolve()
       .then(http.fetch(http.POST, "/admins/sign_in", user))
-      .then(function (response) {
-        Utils.storage.setAuthKeyInStorage(
-          JSON.stringify(response.headers.authorization)
-        );
+      .then((response) => {
+        let authToken = response.headers.authorization;
+        Utils.storage.setAuthKeyInStorage(authToken);
+        this.setAuthToken(authToken);
       })
       .catch(function (error) {
         return Promise.reject(error);

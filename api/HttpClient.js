@@ -1,6 +1,4 @@
 import axios from "axios";
-import Utils from "../utils";
-const TOKEN_HEADER = "Authorization";
 
 export default class HttpClient {
   constructor(baseUrl) {
@@ -15,15 +13,12 @@ export default class HttpClient {
     this.baseUrl = baseUrl;
   }
 
-  async createHeaders() {
+  createHeaders() {
     let headers = {};
-    let token = await Utils.storage.getAuthKeyFromStorage();
-
-    if (token) {
-      headers = { [`${TOKEN_HEADER}`]: token };
+    if (this.authToken) {
+      headers["Authorization"] = this.authToken;
     }
 
-    // if (this.authToken) headers[TOKEN_HEADER] = this.authToken;
     return headers;
   }
 
@@ -73,19 +68,19 @@ export default class HttpClient {
     throw new Error(`Unknown method: ${method}`);
   }
 
-  async getReq(endpoint, variables) {
+  getReq(endpoint, variables) {
     const self = this;
-    let headers = await self.createHeaders();
+    let headers = self.createHeaders();
     return axios.get(this.baseUrl + endpoint, {
       params: variables,
       headers: headers,
     });
   }
 
-  async postReq(endpoint, variables) {
+  postReq(endpoint, variables) {
     const self = this;
     let baseUrl = this.baseUrl;
-    let headers = await self.createHeaders();
+    let headers = self.createHeaders();
 
     if (endpoint === "/admins/sign_in") {
       baseUrl = this.baseUrl.replace(/\/api/, "");

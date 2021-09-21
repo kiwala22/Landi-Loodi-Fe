@@ -13,5 +13,5 @@ export default function CatchAuth({ navigation }) {
     navigation.navigate("ViewLogin");
   }
 
-  return <View></View>;
+  return <View>{/**add preloader here */}</View>;
 }

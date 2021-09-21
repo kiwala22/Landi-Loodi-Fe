@@ -51,7 +51,6 @@ export default function LoginScreen({ navigation }) {
             style={styles.inputPhone}
             keyboardType="phone-pad"
             placeholder={Utils.strings.phone}
-            placeholderTextColor={Utils.styles.placeholderTextColor}
             value={phone}
             onChangeText={(text) => setPhone(text)}
           />
@@ -62,7 +61,6 @@ export default function LoginScreen({ navigation }) {
             style={styles.inputPassword}
             secureTextEntry={true}
             placeholder={Utils.strings.password}
-            placeholderTextColor={Utils.styles.placeholderTextColor}
             onChangeText={(text) => setPassword(text)}
           />
 

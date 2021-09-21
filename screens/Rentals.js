@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
-import { FlatList, StyleSheet, Text, View } from "react-native";
-import { FAB, List } from "react-native-paper";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { FAB } from "react-native-paper";
+import { Row, Table } from "react-native-table-component";
 import { useDispatch, useSelector } from "react-redux";
 import { ADD_RENTALS } from "../redux/types";
 import utils from "../utils";
@@ -9,6 +10,8 @@ export default function Rentals({ navigation }) {
   const rentals = useSelector((state) => state.rentals);
   const ApiManager = useSelector((state) => state.ApiManager);
   const dispatcher = useDispatch();
+  const TableHead = ["Rental Num #", "Amount", "Status"];
+  const widthArr = [120, 125, 120];
 
   useEffect(() => getRentalsData(), []);
 
@@ -22,6 +25,18 @@ export default function Rentals({ navigation }) {
       .catch((e) => alert("Failed to Load Data."));
   };
 
+  const notAllowed = ["id", "created_at", "updated_at"];
+  var Data = rentals
+    .map((fl) =>
+      Object.keys(fl)
+        .filter((vl) => !notAllowed.includes(vl))
+        .reduce((obj, key) => {
+          obj[key] = fl[key];
+          return obj;
+        }, {})
+    )
+    .map((element) => Object.values(element));
+
   return (
     <>
       {rentals.length === 0 ? (
@@ -31,18 +46,39 @@ export default function Rentals({ navigation }) {
           </View>
         </>
       ) : (
-        <FlatList
-          data={rentals}
-          renderItem={({ item }) => (
-            <List.Item
-              title={item.rental_number}
-              description={item.status}
-              left={(props) => <List.Icon {...props} icon="home" />}
-              titleStyle={styles.listTitle}
-            />
-          )}
-          keyExtractor={(item) => item.id.toString()}
-        />
+        <View>
+          <ScrollView horizontal={true}>
+            <View>
+              <Table
+                style={styles.tableTop}
+                borderStyle={{ borderWidth: 1, borderColor: "#ffa1d2" }}
+              >
+                <Row
+                  data={TableHead}
+                  style={styles.HeadStyle}
+                  textStyle={styles.TableText}
+                  widthArr={widthArr}
+                />
+              </Table>
+              <ScrollView style={styles.dataWrapper}>
+                <Table borderStyle={{ borderColor: "#C1C0B9" }}>
+                  {Data.map((dataRow, index) => (
+                    <Row
+                      key={index}
+                      data={dataRow}
+                      widthArr={widthArr}
+                      style={[
+                        styles.row,
+                        index % 2 && { backgroundColor: "#ffffff" },
+                      ]}
+                      textStyle={styles.text}
+                    />
+                  ))}
+                </Table>
+              </ScrollView>
+            </View>
+          </ScrollView>
+        </View>
       )}
       <FAB
         style={styles.fab}
@@ -79,5 +115,32 @@ const styles = StyleSheet.create({
   },
   listTitle: {
     fontSize: 20,
+  },
+  tableTop: {
+    padding: 5,
+  },
+  HeadStyle: {
+    height: 50,
+    alignContent: "center",
+    backgroundColor: "#ffe0f0",
+  },
+  TableText: {
+    margin: 10,
+  },
+  head: {
+    height: 50,
+    // backgroundColor: "#6F7BD9",
+  },
+  text: {
+    textAlign: "center",
+    fontWeight: "200",
+    margin: 10,
+  },
+  dataWrapper: {
+    marginTop: -1,
+  },
+  row: {
+    height: 40,
+    backgroundColor: "#F7F8FA",
   },
 });

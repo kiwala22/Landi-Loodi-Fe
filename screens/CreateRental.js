@@ -62,7 +62,7 @@ function CreateRental({ navigation }) {
           placeholder={utils.strings.amount}
           value={rentalAmount}
           mode="outlined"
-          keyboardType="number-pad"
+          keyboardType="numeric"
           placeholderTextColor={placeholder.color}
           onChangeText={setRentalAmount}
           style={styles.input}

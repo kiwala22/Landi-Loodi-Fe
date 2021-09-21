@@ -4,14 +4,18 @@ import { ADD_CONTRACTS, ADD_PAYMENTS, ADD_RENTALS, ADD_TENANTS } from "./types";
 
 function processData(data, payload) {
   if (payload instanceof Array) {
-    data = data.concat([payload]);
+    data = [];
+    data = payload;
   } else {
     data.push(payload);
   }
 
   /** Help me remove duplicates from array of [data] before you return! */
+  var newData = [
+    ...new Set(data),
+  ]; /** This removes duplicates but is it redundant **/
 
-  return data;
+  return newData;
 }
 
 const initialState = {

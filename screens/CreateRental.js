@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { ScrollView, StyleSheet, View } from "react-native";
 import { FAB, IconButton, TextInput } from "react-native-paper";
 import RNPickerSelect from "react-native-picker-select";
 import { useDispatch, useSelector } from "react-redux";
@@ -48,39 +48,41 @@ function CreateRental({ navigation }) {
         style={styles.iconButton}
       />
       <View style={styles.container}>
-        <TextInput
-          placeholder={utils.strings.rentalNumber}
-          value={rentalNumber}
-          mode="outlined"
-          keyboardType="default"
-          placeholderTextColor={placeholder.color}
-          onChangeText={setRentalNumber}
-          style={styles.input}
-          theme={{ colors: { primary: utils.styles.primaryColor } }}
-        />
-        <TextInput
-          placeholder={utils.strings.amount}
-          value={rentalAmount}
-          mode="outlined"
-          keyboardType="numeric"
-          placeholderTextColor={placeholder.color}
-          onChangeText={setRentalAmount}
-          style={styles.input}
-          theme={{ colors: { primary: utils.styles.primaryColor } }}
-        />
-        <RNPickerSelect
-          placeholder={placeholder}
-          value={status}
-          items={[
-            { label: "Available", value: "Available" },
-            { label: "Occupied", value: "Occupied" },
-          ]}
-          placeholderTextColor={placeholder.color}
-          theme={{ colors: { primary: utils.styles.primaryColor } }}
-          onValueChange={(value) => setStatus(value)}
-          style={pickerSelectStyles}
-          useNativeAndroidPickerStyle={false}
-        />
+        <ScrollView>
+          <TextInput
+            placeholder={utils.strings.rentalNumber}
+            value={rentalNumber}
+            mode="outlined"
+            keyboardType="default"
+            placeholderTextColor={placeholder.color}
+            onChangeText={setRentalNumber}
+            style={styles.input}
+            theme={{ colors: { primary: utils.styles.primaryColor } }}
+          />
+          <TextInput
+            placeholder={utils.strings.amount}
+            value={rentalAmount}
+            mode="outlined"
+            keyboardType="numeric"
+            placeholderTextColor={placeholder.color}
+            onChangeText={setRentalAmount}
+            style={styles.input}
+            theme={{ colors: { primary: utils.styles.primaryColor } }}
+          />
+          <RNPickerSelect
+            placeholder={placeholder}
+            value={status}
+            items={[
+              { label: "Available", value: "Available" },
+              { label: "Occupied", value: "Occupied" },
+            ]}
+            placeholderTextColor={placeholder.color}
+            theme={{ colors: { primary: utils.styles.primaryColor } }}
+            onValueChange={(value) => setStatus(value)}
+            style={pickerSelectStyles}
+            useNativeAndroidPickerStyle={false}
+          />
+        </ScrollView>
         <FAB style={styles.fab} icon="check" onPress={() => submit()} />
       </View>
     </>

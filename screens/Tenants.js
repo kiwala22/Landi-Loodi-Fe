@@ -1,8 +1,10 @@
 import { Card, WhiteSpace, WingBlank } from "@ant-design/react-native";
+import { FontAwesome5 } from "@expo/vector-icons";
 import React, { useEffect } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import { FAB } from "react-native-paper";
+import PTRView from "react-native-pull-to-refresh";
 import { useDispatch, useSelector } from "react-redux";
 import { ADD_TENANTS } from "../redux/types";
 import utils from "../utils";
@@ -16,51 +18,61 @@ export default function Tenants({ navigation }) {
   const fetchTenants = () => {
     let path = "/tenants";
     let variables = {};
-    ApiManager.get(path, variables)
-      .then((response) => {
-        dispatcher({ type: ADD_TENANTS, payload: response.data });
-      })
-      .catch((e) => alert("Failed to Load Tenants Data."));
+    return new Promise((resolve) => {
+      ApiManager.get(path, variables)
+        .then((response) => {
+          resolve();
+          dispatcher({ type: ADD_TENANTS, payload: response.data });
+        })
+        .catch((e) => {
+          resolve();
+          alert("Failed to Load Tenants Data.");
+        });
+    });
   };
 
   return (
     <View style={styles.container}>
-      {tenants.length === 0 ? (
-        <View style={styles.titleContainer}>
-          <Text style={styles.title}>{utils.strings.noTenantsFound}</Text>
-        </View>
-      ) : (
-        <FlatList
-          data={tenants}
-          renderItem={({ item }) => (
-            <>
-              <WingBlank size="lg">
-                <Card>
-                  <Card.Header
-                    title={`${item.other_names} ${item.surname}`}
-                    // thumb={<Icon style={{ marginRight: 2 }} name={"user"} />}
-                  />
-                  <Card.Body>
-                    <View style={{ height: 65 }}>
-                      <Text style={{ marginLeft: 16, marginBottom: 8 }}>
-                        {`+${item.phone_number}`}
-                      </Text>
-                      <Text style={{ marginLeft: 16, marginBottom: 8 }}>
-                        {item.id_number}
-                      </Text>
-                      <Text style={{ marginLeft: 16, marginBottom: 8 }}>
-                        {item.marital_status}
-                      </Text>
-                    </View>
-                  </Card.Body>
-                </Card>
-              </WingBlank>
-              <WhiteSpace size="lg" />
-            </>
-          )}
-          keyExtractor={(item) => item.id}
-        />
-      )}
+      <PTRView onRefresh={fetchTenants}>
+        {tenants.length === 0 ? (
+          <View style={styles.titleContainer}>
+            <Text style={styles.title}>{utils.strings.noTenantsFound}</Text>
+          </View>
+        ) : (
+          <FlatList
+            data={tenants}
+            renderItem={({ item }) => (
+              <>
+                <WingBlank size="lg">
+                  <Card>
+                    <Card.Header
+                      title={`${item.other_names} ${item.surname}`}
+                      thumb={
+                        <FontAwesome5 style={{ marginRight: 10 }} name="user" />
+                      }
+                    />
+                    <Card.Body>
+                      <View style={{ height: 65 }}>
+                        <Text style={{ marginLeft: 16, marginBottom: 8 }}>
+                          {`+${item.phone_number}`}
+                        </Text>
+                        <Text style={{ marginLeft: 16, marginBottom: 8 }}>
+                          {item.id_number}
+                        </Text>
+                        <Text style={{ marginLeft: 16, marginBottom: 8 }}>
+                          {item.marital_status}
+                        </Text>
+                      </View>
+                    </Card.Body>
+                  </Card>
+                </WingBlank>
+                <WhiteSpace size="lg" />
+              </>
+            )}
+            keyExtractor={(item) => item.id}
+          />
+        )}
+      </PTRView>
       <FAB
         style={styles.fab}
         small

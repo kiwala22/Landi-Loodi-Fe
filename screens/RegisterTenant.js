@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { ScrollView, StyleSheet, View } from "react-native";
 import { FAB, IconButton, TextInput } from "react-native-paper";
 import RNPickerSelect from "react-native-picker-select";
 import { useDispatch, useSelector } from "react-redux";
@@ -52,54 +52,57 @@ function RegisterTenant({ navigation }) {
         onPress={() => navigation.goBack()}
         style={styles.iconButton}
       />
+
       <View style={styles.container}>
-        <TextInput
-          placeholder={utils.strings.idNumber}
-          value={id_number}
-          mode="outlined"
-          onChangeText={setIdNumber}
-          style={styles.input}
-          theme={{ colors: { primary: utils.styles.primaryColor } }}
-        />
-        <TextInput
-          placeholder={utils.strings.phone}
-          value={phone_number}
-          mode="outlined"
-          keyboardType="number-pad"
-          onChangeText={setPhone}
-          style={styles.input}
-          theme={{ colors: { primary: utils.styles.primaryColor } }}
-        />
-        <TextInput
-          placeholder={utils.strings.surname}
-          value={surname}
-          mode="outlined"
-          onChangeText={setSurName}
-          style={styles.input}
-          theme={{ colors: { primary: utils.styles.primaryColor } }}
-        />
-        <TextInput
-          placeholder={utils.strings.otherNames}
-          value={other_names}
-          mode="outlined"
-          onChangeText={setOtherNames}
-          style={styles.input}
-          theme={{ colors: { primary: utils.styles.primaryColor } }}
-        />
-        <RNPickerSelect
-          placeholder={placeholder}
-          value={marital_status}
-          items={[
-            { label: "Single", value: "single" },
-            { label: "Married", value: "married" },
-            { label: "Other", value: "other" },
-          ]}
-          placeholderTextColor={placeholder.color}
-          theme={{ colors: { primary: utils.styles.primaryColor } }}
-          onValueChange={(value) => setMaritalStatus(value)}
-          style={pickerSelectStyles}
-          useNativeAndroidPickerStyle={false}
-        />
+        <ScrollView>
+          <TextInput
+            placeholder={utils.strings.idNumber}
+            value={id_number}
+            mode="outlined"
+            onChangeText={setIdNumber}
+            style={styles.input}
+            theme={{ colors: { primary: utils.styles.primaryColor } }}
+          />
+          <TextInput
+            placeholder={utils.strings.phone}
+            value={phone_number}
+            mode="outlined"
+            keyboardType="number-pad"
+            onChangeText={setPhone}
+            style={styles.input}
+            theme={{ colors: { primary: utils.styles.primaryColor } }}
+          />
+          <TextInput
+            placeholder={utils.strings.surname}
+            value={surname}
+            mode="outlined"
+            onChangeText={setSurName}
+            style={styles.input}
+            theme={{ colors: { primary: utils.styles.primaryColor } }}
+          />
+          <TextInput
+            placeholder={utils.strings.otherNames}
+            value={other_names}
+            mode="outlined"
+            onChangeText={setOtherNames}
+            style={styles.input}
+            theme={{ colors: { primary: utils.styles.primaryColor } }}
+          />
+          <RNPickerSelect
+            placeholder={placeholder}
+            value={marital_status}
+            items={[
+              { label: "Single", value: "single" },
+              { label: "Married", value: "married" },
+              { label: "Other", value: "other" },
+            ]}
+            placeholderTextColor={placeholder.color}
+            theme={{ colors: { primary: utils.styles.primaryColor } }}
+            onValueChange={(value) => setMaritalStatus(value)}
+            style={pickerSelectStyles}
+            useNativeAndroidPickerStyle={false}
+          />
+        </ScrollView>
         <FAB style={styles.fab} icon="check" onPress={() => submit()} />
       </View>
     </>

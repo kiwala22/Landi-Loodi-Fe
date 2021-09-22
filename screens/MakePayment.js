@@ -5,7 +5,7 @@ import Header from "../components/Header";
 import utils from "../utils";
 
 function MakePayment({ navigation }) {
-  const [amount, setAmount] = useState(0);
+  const [amount, setAmount] = useState(null);
   const [remarks, setRemarks] = useState(null);
 
   const submit = () => {

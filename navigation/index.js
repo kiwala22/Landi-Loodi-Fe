@@ -5,6 +5,7 @@ import ViewCreateRental from "../screens/CreateRental";
 import ViewDashboard from "../screens/Dashboard";
 import ViewLogin from "../screens/Login";
 import ViewMakePayment from "../screens/MakePayment";
+import ViewRegisterTenant from "../screens/RegisterTenant";
 
 const StackNavigator = createStackNavigator(
   {
@@ -22,6 +23,9 @@ const StackNavigator = createStackNavigator(
     },
     ViewCreateRental: {
       screen: ViewCreateRental,
+    },
+    ViewRegisterTenant: {
+      screen: ViewRegisterTenant,
     },
   },
   {

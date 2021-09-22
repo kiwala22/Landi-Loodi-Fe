@@ -1,7 +1,5 @@
-import { Card, Icon, WhiteSpace, WingBlank } from "@ant-design/react-native";
-import { AppLoading } from "expo";
-import * as Font from "expo-font";
-import React, { useEffect, useState } from "react";
+import { Card, WhiteSpace, WingBlank } from "@ant-design/react-native";
+import React, { useEffect } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import { FAB } from "react-native-paper";
@@ -13,23 +11,7 @@ export default function Tenants({ navigation }) {
   const tenants = useSelector((state) => state.tenants);
   const ApiManager = useSelector((state) => state.ApiManager);
   const dispatcher = useDispatch();
-  const [isReady, setIsReady] = useState(false);
   useEffect(() => fetchTenants(), []);
-
-  /* Man first help me check this use effect function, it is crashing on every refresh */
-
-  useEffect(async () => {
-    await Font.loadAsync(
-      "antoutline",
-      require("@ant-design/icons-react-native/fonts/antoutline.ttf")
-    );
-
-    await Font.loadAsync(
-      "antfill",
-      require("@ant-design/icons-react-native/fonts/antfill.ttf")
-    );
-    setIsReady(true);
-  }, []);
 
   const fetchTenants = () => {
     let path = "/tenants";
@@ -47,7 +29,7 @@ export default function Tenants({ navigation }) {
         <View style={styles.titleContainer}>
           <Text style={styles.title}>{utils.strings.noTenantsFound}</Text>
         </View>
-      ) : isReady ? (
+      ) : (
         <FlatList
           data={tenants}
           renderItem={({ item }) => (
@@ -56,7 +38,7 @@ export default function Tenants({ navigation }) {
                 <Card>
                   <Card.Header
                     title={`${item.other_names} ${item.surname}`}
-                    thumb={<Icon style={{ marginRight: 2 }} name={"user"} />}
+                    // thumb={<Icon style={{ marginRight: 2 }} name={"user"} />}
                   />
                   <Card.Body>
                     <View style={{ height: 65 }}>
@@ -78,8 +60,6 @@ export default function Tenants({ navigation }) {
           )}
           keyExtractor={(item) => item.id}
         />
-      ) : (
-        AppLoading
       )}
       <FAB
         style={styles.fab}

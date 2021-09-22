@@ -8,8 +8,12 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "@ant-design/react-native": "^4.2.0",
     "@expo/vector-icons": "^12.0.0",
     "@react-native-async-storage/async-storage": "~1.15.0",
+    "@react-native-community/cameraroll": "^4.0.4",
+    "@react-native-community/segmented-control": "^2.2.2",
+    "@react-native-community/slider": "^4.1.7",
     "@react-native-picker/picker": "1.16.1",
     "axios": "^0.21.4",
     "expo": "~42.0.1",

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { FAB, IconButton, TextInput } from "react-native-paper";
 import RNPickerSelect from "react-native-picker-select";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Header from "../components/Header";
 import { ADD_TENANTS } from "../redux/types";
 import utils from "../utils";
@@ -14,6 +14,7 @@ function RegisterTenant({ navigation }) {
   const [marital_status, setMaritalStatus] = useState(null);
   const [id_number, setIdNumber] = useState(null);
   const ApiManager = useSelector((state) => state.ApiManager);
+  const dispatcher = useDispatch();
 
   const placeholder = {
     label: utils.strings.maritalStatus,
@@ -22,6 +23,7 @@ function RegisterTenant({ navigation }) {
   };
 
   const submit = () => {
+    let path = "/tenants";
     let variables = {
       tenant: {
         phone_number,
@@ -32,7 +34,7 @@ function RegisterTenant({ navigation }) {
       },
     };
 
-    ApiManager.post("/tenants", variables)
+    ApiManager.post(path, variables)
       .then((response) => {
         dispatcher({ type: ADD_TENANTS, payload: response.data });
         navigation.goBack();

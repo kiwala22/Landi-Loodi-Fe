@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
-import { FAB } from "react-native-paper";
-import { Row, Table } from "react-native-table-component";
+import { FlatList, ScrollView, StyleSheet, Text, View } from "react-native";
+import { Colors, FAB, List } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
 import { ADD_RENTALS } from "../redux/types";
 import utils from "../utils";
@@ -10,8 +9,6 @@ export default function Rentals({ navigation }) {
   const rentals = useSelector((state) => state.rentals);
   const ApiManager = useSelector((state) => state.ApiManager);
   const dispatcher = useDispatch();
-  const TableHead = ["Rental Num #", "Amount", "Status"];
-  const widthArr = [120, 125, 120];
 
   useEffect(() => getRentalsData(), []);
 
@@ -22,71 +19,43 @@ export default function Rentals({ navigation }) {
       .then((response) => {
         dispatcher({ type: ADD_RENTALS, payload: response.data });
       })
-      .catch((e) => alert("Failed to Load Data."));
+      .catch((e) => alert("Failed to Load Rentals Data."));
   };
-
-  const notAllowed = ["id", "created_at", "updated_at"];
-  var Data = rentals
-    .map((fl) =>
-      Object.keys(fl)
-        .filter((vl) => !notAllowed.includes(vl))
-        .reduce((obj, key) => {
-          obj[key] = fl[key];
-          return obj;
-        }, {})
-    )
-    .map((element) => Object.values(element));
 
   return (
     <>
-      {rentals.length === 0 ? (
-        <>
-          <View style={styles.titleContainer}>
-            <Text style={styles.title}>No Rentals registered yet!</Text>
-          </View>
-        </>
-      ) : (
-        <View>
-          <ScrollView horizontal={true}>
-            <View>
-              <Table
-                style={styles.tableTop}
-                borderStyle={{ borderWidth: 1, borderColor: "#ffa1d2" }}
-              >
-                <Row
-                  data={TableHead}
-                  style={styles.HeadStyle}
-                  textStyle={styles.TableText}
-                  widthArr={widthArr}
-                />
-              </Table>
-              <ScrollView style={styles.dataWrapper}>
-                <Table borderStyle={{ borderColor: "#C1C0B9" }}>
-                  {Data.map((dataRow, index) => (
-                    <Row
-                      key={index}
-                      data={dataRow}
-                      widthArr={widthArr}
-                      style={[
-                        styles.row,
-                        index % 2 && { backgroundColor: "#ffffff" },
-                      ]}
-                      textStyle={styles.text}
-                    />
-                  ))}
-                </Table>
-              </ScrollView>
+      <View style={styles.container}>
+        {rentals.length === 0 ? (
+          <>
+            <View style={styles.titleContainer}>
+              <Text style={styles.title}>No Rentals registered yet!</Text>
             </View>
+          </>
+        ) : (
+          <ScrollView>
+            <FlatList
+              data={rentals}
+              renderItem={({ item }) => (
+                <List.Item
+                  title={`${item.rental_number} - ${item.status}`}
+                  description={item.rent_amount}
+                  descriptionNumberOfLines={1}
+                  titleStyle={styles.listTitle}
+                  left={() => <List.Icon color={Colors.pink300} icon="home" />}
+                />
+              )}
+              keyExtractor={(item) => item.id}
+            />
           </ScrollView>
-        </View>
-      )}
-      <FAB
-        style={styles.fab}
-        small
-        icon="home"
-        label="New Rental"
-        onPress={() => navigation.navigate("ViewCreateRental")}
-      />
+        )}
+        <FAB
+          style={styles.fab}
+          small
+          icon="plus"
+          label="ADD"
+          onPress={() => navigation.navigate("ViewCreateRental")}
+        />
+      </View>
     </>
   );
 }
@@ -95,8 +64,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
+    paddingHorizontal: 10,
+    paddingVertical: 20,
   },
   titleContainer: {
     alignItems: "center",

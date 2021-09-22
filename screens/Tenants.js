@@ -1,21 +1,24 @@
 import React, { useEffect } from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
-import { FAB, List } from "react-native-paper";
-import { useSelector } from "react-redux";
+import { Colors, FAB, List } from "react-native-paper";
+import { useDispatch, useSelector } from "react-redux";
 import { ADD_TENANTS } from "../redux/types";
 import utils from "../utils";
 
 export default function Tenants({ navigation }) {
   const tenants = useSelector((state) => state.tenants);
   const ApiManager = useSelector((state) => state.ApiManager);
+  const dispatcher = useDispatch();
   useEffect(() => fetchTenants(), []);
 
   const fetchTenants = () => {
-    ApiManager.get("/tenants")
+    let path = "/tenants";
+    let variables = {};
+    ApiManager.get(path, variables)
       .then((response) => {
         dispatcher({ type: ADD_TENANTS, payload: response.data });
       })
-      .catch((e) => alert("Failed to Load Data."));
+      .catch((e) => alert("Failed to Load Tenants Data."));
   };
 
   return (
@@ -33,7 +36,7 @@ export default function Tenants({ navigation }) {
               description={item.phone_number}
               descriptionNumberOfLines={1}
               titleStyle={styles.listTitle}
-              left={(props) => <List.Icon {...props} icon="user" />}
+              left={() => <List.Icon color={Colors.pink300} icon="account" />}
             />
           )}
           keyExtractor={(item) => item.id}

@@ -3,10 +3,11 @@ import ApiManager from "../api/ApiManager";
 import { ADD_CONTRACTS, ADD_PAYMENTS, ADD_RENTALS, ADD_TENANTS } from "./types";
 
 function processData(data, payload) {
-  if (!payload instanceof Array) {
-    data.push(payload);
+  if (payload instanceof Array) {
+    return payload;
   }
 
+  data.push(payload);
   return data;
 }
 

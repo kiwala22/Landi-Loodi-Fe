@@ -1,6 +1,15 @@
-import React, { useEffect } from "react";
-import { FlatList, ScrollView, StyleSheet, Text, View } from "react-native";
-import { Colors, FAB, List } from "react-native-paper";
+import {
+  Card,
+  Modal,
+  Provider,
+  WhiteSpace,
+  WingBlank,
+} from "@ant-design/react-native";
+import { FontAwesome5 } from "@expo/vector-icons";
+import React, { useEffect, useState } from "react";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { FlatList } from "react-native-gesture-handler";
+import { FAB } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
 import { ADD_RENTALS } from "../redux/types";
 import utils from "../utils";
@@ -8,6 +17,7 @@ import utils from "../utils";
 export default function Rentals({ navigation }) {
   const rentals = useSelector((state) => state.rentals);
   const ApiManager = useSelector((state) => state.ApiManager);
+  const [visible, setVisible] = useState(false);
   const dispatcher = useDispatch();
 
   useEffect(() => getRentalsData(), []);
@@ -22,6 +32,10 @@ export default function Rentals({ navigation }) {
       .catch((e) => alert("Failed to Load Rentals Data."));
   };
 
+  const onClose = () => {
+    setVisible(false);
+  };
+
   return (
     <>
       <View style={styles.container}>
@@ -32,21 +46,64 @@ export default function Rentals({ navigation }) {
             </View>
           </>
         ) : (
-          <ScrollView>
+          <>
             <FlatList
               data={rentals}
               renderItem={({ item }) => (
-                <List.Item
-                  title={`${item.rental_number} - ${item.status}`}
-                  description={item.rent_amount}
-                  descriptionNumberOfLines={1}
-                  titleStyle={styles.listTitle}
-                  left={() => <List.Icon color={Colors.pink300} icon="home" />}
-                />
+                <>
+                  <WingBlank size="lg">
+                    <Card>
+                      <Card.Header
+                        title={item.rental_number}
+                        // thumb={<Icon style={{ marginRight: 2 }} name={"user"} />}
+                        extra={
+                          <>
+                            <TouchableOpacity onPress={() => setVisible(true)}>
+                              <FontAwesome5
+                                name={"ellipsis-h"}
+                                style={{
+                                  color: "#b0006d",
+                                  marginLeft: 125,
+                                  fontSize: 20,
+                                }}
+                              />
+                            </TouchableOpacity>
+                          </>
+                        }
+                      />
+                      <Card.Body>
+                        <View style={{ height: 40 }}>
+                          <Text style={{ marginLeft: 16, marginBottom: 8 }}>
+                            {item.rent_amount}
+                          </Text>
+                          <Text style={{ marginLeft: 16, marginBottom: 0 }}>
+                            {item.status}
+                          </Text>
+                        </View>
+                      </Card.Body>
+                    </Card>
+                  </WingBlank>
+                  <WhiteSpace size="lg" />
+                </>
               )}
               keyExtractor={(item) => item.id}
             />
-          </ScrollView>
+            <Provider>
+              <Modal
+                title="Edit Actions"
+                transparent
+                onClose={onClose}
+                maskClosable
+                visible={visible}
+                closable
+              >
+                <View style={{ paddingVertical: 20 }}>
+                  <Text style={{ textAlign: "center" }}>Edit</Text>
+                  <Text style={{ textAlign: "center" }}>Delete</Text>
+                </View>
+              </Modal>
+            </Provider>
+          </>
         )}
         <FAB
           style={styles.fab}

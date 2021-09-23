@@ -1,4 +1,5 @@
 import {
+  Button,
   Card,
   Modal,
   Provider,
@@ -7,10 +8,17 @@ import {
 } from "@ant-design/react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  RefreshControl,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import { FAB } from "react-native-paper";
-import PTRView from "react-native-pull-to-refresh";
+// import PTRView from "react-native-pull-to-refresh";
 import { useDispatch, useSelector } from "react-redux";
 import { ADD_TENANTS } from "../redux/types";
 import utils from "../utils";
@@ -18,39 +26,59 @@ import utils from "../utils";
 export default function Tenants({ navigation }) {
   const tenants = useSelector((state) => state.tenants);
   const [visible, setVisible] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
   const ApiManager = useSelector((state) => state.ApiManager);
+  const [data, setData] = useState(null);
   const dispatcher = useDispatch();
   useEffect(() => fetchTenants(), []);
 
   const fetchTenants = () => {
     let path = "/tenants";
     let variables = {};
-    return new Promise((resolve) => {
-      ApiManager.get(path, variables)
-        .then((response) => {
-          resolve();
-          dispatcher({ type: ADD_TENANTS, payload: response.data });
-        })
-        .catch((e) => {
-          resolve();
-          alert("Failed to Load Tenants Data.");
-        });
-    });
+    ApiManager.get(path, variables)
+      .then((response) => {
+        dispatcher({ type: ADD_TENANTS, payload: response.data });
+        setRefreshing(false);
+      })
+      .catch((e) => {
+        alert("Failed to Load Tenants Data.");
+      });
   };
 
   const onClose = () => {
+    setData(null);
     setVisible(false);
+  };
+
+  const refresh = () => {
+    setRefreshing(true);
+    fetchTenants();
+  };
+
+  const displayInfo = (data) => {
+    setData(data);
+    setVisible(true);
   };
 
   return (
     <View style={styles.container}>
-      <PTRView onRefresh={fetchTenants}>
-        {tenants.length === 0 ? (
+      {tenants.length === 0 ? (
+        <ScrollView
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={refresh} />
+          }
+        >
           <View style={styles.titleContainer}>
             <Text style={styles.title}>{utils.strings.noTenantsFound}</Text>
           </View>
-        ) : (
-          <>
+        </ScrollView>
+      ) : (
+        <>
+          <ScrollView
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={refresh} />
+            }
+          >
             <FlatList
               data={tenants}
               renderItem={({ item }) => (
@@ -67,7 +95,7 @@ export default function Tenants({ navigation }) {
                         }
                         extra={
                           <>
-                            <TouchableOpacity onPress={() => setVisible(true)}>
+                            <TouchableOpacity onPress={() => displayInfo(item)}>
                               <FontAwesome5
                                 name={"ellipsis-h"}
                                 style={{
@@ -100,9 +128,10 @@ export default function Tenants({ navigation }) {
               )}
               keyExtractor={(item) => item.id}
             />
-          </>
-        )}
-      </PTRView>
+          </ScrollView>
+        </>
+      )}
+      {/* </PTRView> */}
       <Provider>
         <Modal
           title="Edit Actions"
@@ -113,9 +142,19 @@ export default function Tenants({ navigation }) {
           closable
         >
           <View style={{ paddingVertical: 20 }}>
-            <Text style={{ textAlign: "center" }}>Edit</Text>
-            <Text style={{ textAlign: "center" }}>Delete</Text>
+            {data !== null && (
+              <Text style={{ textAlign: "center" }}>{data.other_names}</Text>
+            )}
           </View>
+          <Button
+            type="ghost"
+            onPress={onClose}
+            style={{
+              borderColor: utils.styles.primaryColor,
+            }}
+          >
+            Delete
+          </Button>
         </Modal>
       </Provider>
       <FAB

@@ -10,6 +10,7 @@ export default {
   phone: "Phone",
   makePayment: "Make Payment",
   registerTenant: "Register Tenant",
+  createContract: "New Contract",
   noTenantsFound: "You don't have any tenants!",
   failedToRegisterTenant: "Failed to register tenant!",
   surname: "Surname",

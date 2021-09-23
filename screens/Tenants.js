@@ -18,7 +18,6 @@ import {
 } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import { FAB } from "react-native-paper";
-// import PTRView from "react-native-pull-to-refresh";
 import { useDispatch, useSelector } from "react-redux";
 import { ADD_TENANTS } from "../redux/types";
 import utils from "../utils";
@@ -28,7 +27,7 @@ export default function Tenants({ navigation }) {
   const [visible, setVisible] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const ApiManager = useSelector((state) => state.ApiManager);
-  const [data, setData] = useState(null);
+  const [data, setData] = useState({});
   const dispatcher = useDispatch();
   useEffect(() => fetchTenants(), []);
 
@@ -62,23 +61,17 @@ export default function Tenants({ navigation }) {
 
   return (
     <View style={styles.container}>
-      {tenants.length === 0 ? (
-        <ScrollView
-          refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={refresh} />
-          }
-        >
+      <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={refresh} />
+        }
+      >
+        {tenants.length === 0 ? (
           <View style={styles.titleContainer}>
             <Text style={styles.title}>{utils.strings.noTenantsFound}</Text>
           </View>
-        </ScrollView>
-      ) : (
-        <>
-          <ScrollView
-            refreshControl={
-              <RefreshControl refreshing={refreshing} onRefresh={refresh} />
-            }
-          >
+        ) : (
+          <>
             <FlatList
               data={tenants}
               renderItem={({ item }) => (
@@ -128,32 +121,32 @@ export default function Tenants({ navigation }) {
               )}
               keyExtractor={(item) => item.id}
             />
-          </ScrollView>
-        </>
-      )}
-      {/* </PTRView> */}
+          </>
+        )}
+      </ScrollView>
+
       <Provider>
         <Modal
-          title="Edit Actions"
+          title="Actions"
           transparent
           onClose={onClose}
           maskClosable
           visible={visible}
           closable
         >
-          <View style={{ paddingVertical: 20 }}>
-            {data !== null && (
-              <Text style={{ textAlign: "center" }}>{data.other_names}</Text>
-            )}
-          </View>
           <Button
             type="ghost"
-            onPress={onClose}
+            onPress={() => {
+              onClose();
+              navigation.navigate("ViewRegisterTenant", data);
+            }}
             style={{
               borderColor: utils.styles.primaryColor,
+              marginTop: 10,
+              marginBottom: 10,
             }}
           >
-            Delete
+            Edit
           </Button>
         </Modal>
       </Provider>
@@ -162,7 +155,7 @@ export default function Tenants({ navigation }) {
         small
         icon="plus"
         label="Add"
-        onPress={() => navigation.navigate("ViewRegisterTenant")}
+        onPress={() => navigation.navigate("ViewRegisterTenant", {})}
       />
     </View>
   );

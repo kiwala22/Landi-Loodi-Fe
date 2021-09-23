@@ -27,7 +27,7 @@ export default function Rentals({ navigation }) {
   const ApiManager = useSelector((state) => state.ApiManager);
   const [refreshing, setRefreshing] = useState(false);
   const [visible, setVisible] = useState(false);
-  const [data, setData] = useState(null);
+  const [data, setData] = useState({});
   const dispatcher = useDispatch();
 
   useEffect(() => getRentalsData(), []);
@@ -61,25 +61,19 @@ export default function Rentals({ navigation }) {
   return (
     <>
       <View style={styles.container}>
-        {rentals.length === 0 ? (
-          <>
-            <ScrollView
-              refreshControl={
-                <RefreshControl refreshing={refreshing} onRefresh={refresh} />
-              }
-            >
+        <ScrollView
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={refresh} />
+          }
+        >
+          {rentals.length === 0 ? (
+            <>
               <View style={styles.titleContainer}>
                 <Text style={styles.title}>No Rentals registered yet!</Text>
               </View>
-            </ScrollView>
-          </>
-        ) : (
-          <>
-            <ScrollView
-              refreshControl={
-                <RefreshControl refreshing={refreshing} onRefresh={refresh} />
-              }
-            >
+            </>
+          ) : (
+            <>
               <FlatList
                 data={rentals}
                 renderItem={({ item }) => (
@@ -128,42 +122,40 @@ export default function Rentals({ navigation }) {
                 )}
                 keyExtractor={(item) => item.id}
               />
-            </ScrollView>
-            <Provider>
-              <Modal
-                title="Edit Actions"
-                transparent
-                onClose={onClose}
-                maskClosable
-                visible={visible}
-                closable
-              >
-                <View style={{ paddingVertical: 20 }}>
-                  {data !== null && (
-                    <Text style={{ textAlign: "center" }}>
-                      {data.rental_number}
-                    </Text>
-                  )}
-                </View>
-                <Button
-                  type="ghost"
-                  onPress={onClose}
-                  style={{
-                    borderColor: utils.styles.primaryColor,
-                  }}
-                >
-                  Delete
-                </Button>
-              </Modal>
-            </Provider>
-          </>
-        )}
+            </>
+          )}
+        </ScrollView>
+        <Provider>
+          <Modal
+            title="Actions"
+            transparent
+            onClose={onClose}
+            maskClosable
+            visible={visible}
+            closable
+          >
+            <Button
+              type="ghost"
+              onPress={() => {
+                onClose();
+                navigation.navigate("ViewCreateRental", data);
+              }}
+              style={{
+                borderColor: utils.styles.primaryColor,
+                marginTop: 10,
+                marginBottom: 10,
+              }}
+            >
+              Edit
+            </Button>
+          </Modal>
+        </Provider>
         <FAB
           style={styles.fab}
           small
           icon="plus"
           label="ADD"
-          onPress={() => navigation.navigate("ViewCreateRental")}
+          onPress={() => navigation.navigate("ViewCreateRental", {})}
         />
       </View>
     </>

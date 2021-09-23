@@ -7,10 +7,11 @@ import Header from "../components/Header";
 import { ADD_RENTALS } from "../redux/types";
 import utils from "../utils";
 
-function CreateRental({ navigation }) {
-  const [rentalNumber, setRentalNumber] = useState(null);
-  const [rentalAmount, setRentalAmount] = useState(null);
-  const [status, setStatus] = useState(null);
+function CreateRental({ route, navigation }) {
+  const data = route.params;
+  const [rentalNumber, setRentalNumber] = useState(data.rental_number);
+  const [rentalAmount, setRentalAmount] = useState(data.rent_amount);
+  const [status, setStatus] = useState(data.status);
   const ApiManager = useSelector((state) => state.ApiManager);
   const dispatcher = useDispatch();
 
@@ -29,12 +30,17 @@ function CreateRental({ navigation }) {
         status: status,
       },
     };
-    ApiManager.post(path, variables)
-      .then((response) => {
-        dispatcher({ type: ADD_RENTALS, payload: response.data });
-        navigation.goBack();
-      })
-      .catch((e) => alert("Failed to create Rental."));
+
+    if (data.id) {
+      //patch update
+    } else {
+      ApiManager.post(path, variables)
+        .then((response) => {
+          dispatcher({ type: ADD_RENTALS, payload: response.data });
+          navigation.goBack();
+        })
+        .catch((e) => alert("Failed to create Rental."));
+    }
   };
 
   return (

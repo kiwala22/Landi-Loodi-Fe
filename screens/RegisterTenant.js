@@ -7,12 +7,13 @@ import Header from "../components/Header";
 import { ADD_TENANTS } from "../redux/types";
 import utils from "../utils";
 
-function RegisterTenant({ navigation }) {
-  const [phone_number, setPhone] = useState(null);
-  const [surname, setSurName] = useState(null);
-  const [other_names, setOtherNames] = useState(null);
-  const [marital_status, setMaritalStatus] = useState(null);
-  const [id_number, setIdNumber] = useState(null);
+function RegisterTenant({ route, navigation }) {
+  const data = route.params;
+  const [phone_number, setPhone] = useState(data.phone_number);
+  const [surname, setSurName] = useState(data.surname);
+  const [other_names, setOtherNames] = useState(data.other_names);
+  const [marital_status, setMaritalStatus] = useState(data.marital_status);
+  const [id_number, setIdNumber] = useState(data.id_number);
   const ApiManager = useSelector((state) => state.ApiManager);
   const dispatcher = useDispatch();
 
@@ -34,12 +35,16 @@ function RegisterTenant({ navigation }) {
       },
     };
 
-    ApiManager.post(path, variables)
-      .then((response) => {
-        dispatcher({ type: ADD_TENANTS, payload: response.data });
-        navigation.goBack();
-      })
-      .catch((e) => alert(utils.strings.failedToRegisterTenant));
+    if (data.id) {
+      //push update to serve
+    } else {
+      ApiManager.post(path, variables)
+        .then((response) => {
+          dispatcher({ type: ADD_TENANTS, payload: response.data });
+          navigation.goBack();
+        })
+        .catch((e) => alert(utils.strings.failedToRegisterTenant));
+    }
   };
 
   return (

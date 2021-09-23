@@ -5,12 +5,12 @@ import {
   Provider,
   WhiteSpace,
 } from "@ant-design/react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { FAB, IconButton } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
 import Header from "../components/Header";
-import { ADD_CONTRACTS } from "../redux/types";
+import { ADD_CONTRACTS, ADD_RENTALS, ADD_TENANTS } from "../redux/types";
 import utils from "../utils";
 
 function Contract({ navigation }) {
@@ -23,33 +23,20 @@ function Contract({ navigation }) {
   const tenants = useSelector((state) => state.tenants);
   const dispatcher = useDispatch();
 
-  const tenantData = [
-    {
-      label: "Martin",
-      value: 1,
-      children: [],
-    },
-    {
-      label: "Paul",
-      value: 2,
-      children: [],
-    },
-  ];
+  useEffect(() => {
+    if (!rentals.length && !tenants.length) {
+      Promise.all([ApiManager.get("/tenants"), ApiManager.get("rentals")])
+        .then((response1, response2) => {
+          dispatcher({ type: ADD_TENANTS, payload: response1.data });
 
-  const rentalData = [
-    {
-      label: "HSE-1A",
-      value: 1,
-      children: [],
-    },
-    {
-      label: "HSE-2A",
-      value: 2,
-      children: [],
-    },
-  ];
-
-  //   Array<{value, label, children: Array}>
+          setTimeout(
+            () => dispatcher({ type: ADD_RENTALS, payload: response2.data }),
+            500
+          );
+        })
+        .catch((e) => {});
+    }
+  }, []);
 
   const submit = () => {
     let path = "/contracts";
@@ -86,8 +73,10 @@ function Contract({ navigation }) {
               value={start_date}
               mode="date"
               defaultDate={new Date()}
-              minDate={new Date(2015, 7, 6)}
-              maxDate={new Date(2026, 11, 3)}
+              minDate={new Date()}
+              maxDate={
+                new Date(`${Number(new Date().getFullYear()) + 10}`, 1, 1)
+              }
               onChange={setStartDate}
               format="YYYY-MM-DD"
               extra={"Start Date"}
@@ -106,8 +95,10 @@ function Contract({ navigation }) {
               value={end_date}
               mode="date"
               defaultDate={new Date()}
-              minDate={new Date(2015, 7, 6)}
-              maxDate={new Date(2026, 11, 3)}
+              minDate={new Date()}
+              maxDate={
+                new Date(`${Number(new Date().getFullYear()) + 10}`, 1, 1)
+              }
               onChange={setEndDate}
               format="YYYY-MM-DD"
               extra={"End Date"}
@@ -123,7 +114,12 @@ function Contract({ navigation }) {
           <WhiteSpace size="lg" />
           <List>
             <Picker
-              data={tenantData}
+              data={tenants.map((tenant) => {
+                return {
+                  label: `${tenant.other_names} ${tenant.surname}`,
+                  value: tenant.id,
+                };
+              })}
               cols={1}
               value={tenant_id}
               extra={"Tenant"}
@@ -137,7 +133,12 @@ function Contract({ navigation }) {
           <WhiteSpace size="lg" />
           <List>
             <Picker
-              data={rentalData}
+              data={rentals.map((rental) => {
+                return {
+                  label: rental.rental_number,
+                  value: rental.id,
+                };
+              })}
               cols={1}
               value={rental_id}
               extra={"Rental"}

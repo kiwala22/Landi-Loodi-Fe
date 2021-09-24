@@ -17,8 +17,8 @@ import utils from "../utils";
 function Contract({ navigation }) {
   const [start_date, setStartDate] = useState(null);
   const [end_date, setEndDate] = useState(null);
-  const [tenant_id, setTenantId] = useState(null);
-  const [rental_id, setRentalId] = useState(null);
+  const [tenant_id, setTenantId] = useState([]);
+  const [rental_id, setRentalId] = useState([]);
   const ApiManager = useSelector((state) => state.ApiManager);
   const rentals = useSelector((state) => state.rentals);
   const tenants = useSelector((state) => state.tenants);

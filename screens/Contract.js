@@ -8,6 +8,7 @@ import {
 import React, { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { FAB, IconButton } from "react-native-paper";
+import Toast from "react-native-toast-message";
 import { useDispatch, useSelector } from "react-redux";
 import Header from "../components/Header";
 import { ADD_CONTRACTS, ADD_RENTALS, ADD_TENANTS } from "../redux/types";
@@ -44,8 +45,8 @@ function Contract({ navigation }) {
       contract: {
         start_date,
         end_date,
-        tenant_id,
-        rental_id,
+        tenant_id: tenant_id[0],
+        rental_id: rental_id[0],
       },
     };
     ApiManager.post(path, variables)
@@ -53,7 +54,12 @@ function Contract({ navigation }) {
         dispatcher({ type: ADD_CONTRACTS, payload: response.data });
         navigation.goBack();
       })
-      .catch((e) => alert("Failed to create Contract."));
+      .catch((error) => {
+        Toast.show({
+          type: "error",
+          text1: error.message,
+        });
+      });
   };
 
   return (

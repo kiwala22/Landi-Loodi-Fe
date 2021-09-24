@@ -9,6 +9,7 @@ import {
 import { FontAwesome5 } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
 import {
+  FlatList,
   RefreshControl,
   ScrollView,
   StyleSheet,
@@ -16,7 +17,6 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { FlatList } from "react-native-gesture-handler";
 import { FAB } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
 import { ADD_TENANTS } from "../redux/types";

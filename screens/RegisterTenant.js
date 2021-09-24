@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { FAB, IconButton, TextInput } from "react-native-paper";
 import RNPickerSelect from "react-native-picker-select";
+import Toast from "react-native-toast-message";
 import { useDispatch, useSelector } from "react-redux";
 import Header from "../components/Header";
 import { ADD_TENANTS } from "../redux/types";
@@ -43,7 +44,12 @@ function RegisterTenant({ route, navigation }) {
           dispatcher({ type: ADD_TENANTS, payload: response.data });
           navigation.goBack();
         })
-        .catch((e) => alert(utils.strings.failedToRegisterTenant));
+        .catch((error) => {
+          Toast.show({
+            type: "error",
+            text1: error.message,
+          });
+        });
     }
   };
 

@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
   },
   iconButton: {
-    backgroundColor: "transparent",
+    // backgroundColor: "transparent",
     position: "absolute",
     right: 0,
     top: 20,

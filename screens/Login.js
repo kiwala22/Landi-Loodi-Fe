@@ -17,6 +17,7 @@ import Utils from "../utils";
 export default function LoginScreen({ navigation }) {
   const ApiManager = useSelector((state) => state.ApiManager);
   const dispatch = useDispatch();
+  const [secure, setSecure] = useState(true);
   // dispatch(AddTenants([]));
 
   const [phone, setPhone] = useState(null);
@@ -59,18 +60,23 @@ export default function LoginScreen({ navigation }) {
 
           <TextInput
             style={styles.inputPassword}
-            secureTextEntry={true}
+            secureTextEntry={secure}
             placeholder={Utils.strings.password}
             onChangeText={(text) => setPassword(text)}
           />
 
-          {/* https://reactnative.dev/docs/touchableopacity */}
+          <FontAwesome5
+            style={styles.iconEye}
+            name={secure ? "eye-slash" : "eye"}
+            onPress={() => setSecure(!secure)}
+          />
+
           <TouchableOpacity style={styles.buttonLogin} onPress={Login}>
             <Text style={styles.buttonLoginText}>{Utils.strings.submit}</Text>
           </TouchableOpacity>
         </View>
 
-        <View style={styles.footer}>
+        <View>
           <TouchableOpacity>
             <Text style={styles.userText}>
               &copy; {new Date().getFullYear()} {Utils.strings.copyright}
@@ -130,6 +136,14 @@ const styles = StyleSheet.create({
     left: 22,
     zIndex: 10,
   },
+  iconEye: {
+    color: "#929292",
+    position: "absolute",
+    fontSize: 18,
+    top: 98,
+    left: 275,
+    zIndex: 10,
+  },
   inputPhone: {
     height: 60,
     borderRadius: 30,
@@ -162,6 +176,6 @@ const styles = StyleSheet.create({
     ...TEXT,
   },
   footer: {
-    flex: 0.1,
+    flex: 1,
   },
 });

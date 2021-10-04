@@ -71,7 +71,6 @@ const styles = StyleSheet.create({
     backgroundColor: Utils.styles.primaryColor,
   },
   iconButton: {
-    backgroundColor: "transparent",
     position: "absolute",
     right: 0,
     top: 20,

@@ -8,6 +8,7 @@ function processData(data, payload) {
   }
 
   data.push(payload);
+  // alert(JSON.stringify(data));
   return data;
 }
 

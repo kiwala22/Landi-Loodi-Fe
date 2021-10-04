@@ -5,7 +5,7 @@ export default {
   appName: "Landi Loodi",
   submit: "SUBMIT",
   login: "LOGIN",
-  copyright: "company name",
+  copyright: "Afri-Tech",
   password: "Password",
   phone: "Phone",
   makePayment: "Make Payment",

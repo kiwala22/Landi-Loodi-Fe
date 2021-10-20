@@ -79,7 +79,7 @@ export default function Rentals({ navigation }) {
                 renderItem={({ item }) => (
                   <>
                     <WingBlank size="lg">
-                      <Card>
+                      <Card full>
                         <Card.Header
                           title={item.rental_number}
                           thumb={

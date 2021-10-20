@@ -77,7 +77,7 @@ export default function Tenants({ navigation }) {
               renderItem={({ item }) => (
                 <>
                   <WingBlank size="lg">
-                    <Card>
+                    <Card full>
                       <Card.Header
                         title={`${item.other_names} ${item.surname}`}
                         thumb={
